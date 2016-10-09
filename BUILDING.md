@@ -13,7 +13,7 @@ The following steps should help you (re)build LibreSignal from the command line.
 
 1. Checkout the LibreSignal project source and all submodules with the command (`git` 1.6.5 or higher):
     
-        git clone --recursive https://github.com/1f5/LibreSignal-BB10.git
+        git clone --recursive https://github.com/wtfs/LibreSignal-BB10.git
 
 
 2. Make sure you have the [Android SDK](https://developer.android.com/sdk/index.html) and [Android NDK](https://developer.android.com/ndk/index.html) installed.
