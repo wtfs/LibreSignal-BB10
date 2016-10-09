@@ -14,6 +14,7 @@ import android.util.Pair;
 
 import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.contacts.CustomContactDirectory;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.crypto.SessionUtil;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
@@ -88,7 +89,10 @@ public class DirectoryHelper {
       throws IOException
   {
     TextSecureDirectory       directory              = TextSecureDirectory.getInstance(context);
-    Set<String>               eligibleContactNumbers = directory.getPushEligibleContactNumbers(localNumber);
+    Set<String>               eligibleContactNumbers =
+                                TextSecurePreferences.isCustomContactDirectoryEnabled(context) ?
+                                CustomContactDirectory.getInstance(context).getAllNumbersAsE164(localNumber) :
+                                directory.getPushEligibleContactNumbers(localNumber);
     List<ContactTokenDetails> activeTokens           = accountManager.getContacts(eligibleContactNumbers);
 
     if (activeTokens != null) {

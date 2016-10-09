@@ -10,8 +10,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import org.thoughtcrime.redphone.signaling.RedPhoneAccountAttributes;
 import org.thoughtcrime.redphone.signaling.RedPhoneAccountManager;
 import org.thoughtcrime.redphone.signaling.RedPhoneTrustStore;
@@ -242,23 +240,13 @@ public class RegistrationService extends Service {
     SignedPreKeyRecord signedPreKey = PreKeyUtil.generateSignedPreKey(this, identityKey);
     accountManager.setPreKeys(identityKey.getPublicKey(),lastResort, signedPreKey, records);
 
-    setState(new RegistrationState(RegistrationState.STATE_GCM_REGISTERING, number));
-
-    String gcmRegistrationId = GoogleCloudMessaging.getInstance(this).register(GcmRefreshJob.REGISTRATION_ID);
-    accountManager.setGcmId(Optional.of(gcmRegistrationId));
-
-    TextSecurePreferences.setGcmRegistrationId(this, gcmRegistrationId);
     TextSecurePreferences.setWebsocketRegistered(this, true);
 
     DatabaseFactory.getIdentityDatabase(this).saveIdentity(self.getRecipientId(), identityKey.getPublicKey());
     DirectoryHelper.refreshDirectory(this, accountManager, number);
 
-    RedPhoneAccountManager redPhoneAccountManager = new RedPhoneAccountManager(BuildConfig.REDPHONE_MASTER_URL,
-                                                                               new RedPhoneTrustStore(this),
-                                                                               number, password);
-
-    String verificationToken = accountManager.getAccountVerificationToken();
-    redPhoneAccountManager.createAccount(verificationToken, new RedPhoneAccountAttributes(signalingKey, gcmRegistrationId));
+    accountManager.getAccountVerificationToken();
+    //got from LibreSIgnal, not sure what it does.
 
     DirectoryRefreshListener.schedule(this);
   }
@@ -290,6 +278,7 @@ public class RegistrationService extends Service {
 
     if (verifying) {
       TextSecurePreferences.setPushRegistered(this, false);
+      TextSecurePreferences.setGcmRegistered(this, false);
     }
   }
 

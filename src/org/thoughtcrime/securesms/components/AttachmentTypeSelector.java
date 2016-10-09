@@ -33,7 +33,6 @@ public class AttachmentTypeSelector extends PopupWindow {
   public static final int ADD_SOUND         = 3;
   public static final int ADD_CONTACT_INFO  = 4;
   public static final int TAKE_PHOTO        = 5;
-  public static final int ADD_LOCATION      = 6;
 
   private static final int ANIMATION_DURATION = 300;
 
@@ -44,7 +43,6 @@ public class AttachmentTypeSelector extends PopupWindow {
   private final @NonNull ImageView   videoButton;
   private final @NonNull ImageView   contactButton;
   private final @NonNull ImageView   cameraButton;
-  private final @NonNull ImageView   locationButton;
   private final @NonNull ImageView   closeButton;
 
   private @Nullable View                      currentAnchor;
@@ -60,22 +58,16 @@ public class AttachmentTypeSelector extends PopupWindow {
     this.imageButton    = ViewUtil.findById(layout, R.id.gallery_button);
     this.audioButton    = ViewUtil.findById(layout, R.id.audio_button);
     this.videoButton    = ViewUtil.findById(layout, R.id.video_button);
-    this.contactButton  = ViewUtil.findById(layout, R.id.contact_button);
+    this.contactButton	= ViewUtil.findById(layout, R.id.contact_button);
     this.cameraButton   = ViewUtil.findById(layout, R.id.camera_button);
     this.closeButton    = ViewUtil.findById(layout, R.id.close_button);
-    this.locationButton = ViewUtil.findById(layout, R.id.location_button);
 
     this.imageButton.setOnClickListener(new PropagatingClickListener(ADD_IMAGE));
     this.audioButton.setOnClickListener(new PropagatingClickListener(ADD_SOUND));
     this.videoButton.setOnClickListener(new PropagatingClickListener(ADD_VIDEO));
     this.contactButton.setOnClickListener(new PropagatingClickListener(ADD_CONTACT_INFO));
     this.cameraButton.setOnClickListener(new PropagatingClickListener(TAKE_PHOTO));
-    this.locationButton.setOnClickListener(new PropagatingClickListener(ADD_LOCATION));
     this.closeButton.setOnClickListener(new CloseClickListener());
-
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-      ViewUtil.findById(layout, R.id.location_linear_layout).setVisibility(View.INVISIBLE);
-    }
 
     setContentView(layout);
     setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
@@ -90,7 +82,8 @@ public class AttachmentTypeSelector extends PopupWindow {
   public void show(@NonNull Activity activity, final @NonNull View anchor) {
     this.currentAnchor = anchor;
 
-    showAtLocation(anchor, Gravity.BOTTOM, 0, 0);
+    int screenHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
+    showAtLocation(anchor, Gravity.NO_GRAVITY, 0, screenHeight - getHeight());
 
     getContentView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
       @Override
@@ -110,7 +103,6 @@ public class AttachmentTypeSelector extends PopupWindow {
       animateButtonIn(cameraButton, ANIMATION_DURATION / 2);
 
       animateButtonIn(audioButton, ANIMATION_DURATION / 3);
-      animateButtonIn(locationButton, ANIMATION_DURATION / 3);
       animateButtonIn(videoButton, ANIMATION_DURATION / 4);
       animateButtonIn(contactButton, 0);
       animateButtonIn(closeButton, 0);

@@ -66,6 +66,7 @@ public class TextSecurePreferences {
   private static final String LOCAL_NUMBER_PREF                = "pref_local_number";
   private static final String VERIFYING_STATE_PREF             = "pref_verifying";
   public  static final String REGISTERED_GCM_PREF              = "pref_gcm_registered";
+  public  static final String REGISTERED_PUSH_PREF             = "pref_push_registered";
   private static final String GCM_PASSWORD_PREF                = "pref_gcm_password";
   private static final String PROMPTED_PUSH_REGISTRATION_PREF  = "pref_prompted_push_registration";
   private static final String PROMPTED_DEFAULT_SMS_PREF        = "pref_prompted_default_sms";
@@ -95,6 +96,9 @@ public class TextSecurePreferences {
   public  static final String SYSTEM_EMOJI_PREF                = "pref_system_emoji";
   private static final String MULTI_DEVICE_PROVISIONED_PREF    = "pref_multi_device";
   public  static final String DIRECT_CAPTURE_CAMERA_ID         = "pref_direct_capture_camera_id";
+
+  private static final String CUSTOM_CONTACT_DIRECTORY         = "pref_custom_contact_directory";
+  private static final String CUSTOM_CONTACT_DIRECTORY_ASKED   = "pref_custom_contact_directory_asked";
 
   public static void setDirectCaptureCameraId(Context context, int value) {
     setIntegerPrefrence(context, DIRECT_CAPTURE_CAMERA_ID, value);
@@ -392,11 +396,20 @@ public class TextSecurePreferences {
   }
 
   public static boolean isPushRegistered(Context context) {
-    return getBooleanPreference(context, REGISTERED_GCM_PREF, false);
+    return getBooleanPreference(context, REGISTERED_PUSH_PREF, false);
   }
 
   public static void setPushRegistered(Context context, boolean registered) {
     Log.w("TextSecurePreferences", "Setting push registered: " + registered);
+    setBooleanPreference(context, REGISTERED_PUSH_PREF, registered);
+  }
+
+  public static boolean isGcmRegistered(Context context) {
+    return getBooleanPreference(context, REGISTERED_GCM_PREF, false);
+  }
+
+  public static void setGcmRegistered(Context context, boolean registered) {
+    Log.w("TextSecurePreferences", "Setting gcm registered: " + registered);
     setBooleanPreference(context, REGISTERED_GCM_PREF, registered);
   }
 
@@ -512,6 +525,24 @@ public class TextSecurePreferences {
     return getStringSetPreference(context,
                                   key,
                                   new HashSet<>(Arrays.asList(context.getResources().getStringArray(defaultValuesRes))));
+  }
+
+  public static boolean isCustomContactDirectoryEnabled(Context context) {
+    // the default is true for better privacy
+    // the user will be asked once to disable it
+    return getBooleanPreference(context, CUSTOM_CONTACT_DIRECTORY, true);
+  }
+
+  public static void setCustomContactDirectoryEnabled(Context context, boolean enabled) {
+    setBooleanPreference(context, CUSTOM_CONTACT_DIRECTORY, enabled);
+  }
+
+  public static boolean hasAskedCustomContactDirectory(Context context) {
+    return getBooleanPreference(context, CUSTOM_CONTACT_DIRECTORY_ASKED, false);
+  }
+
+  public static void setHasAskedCustomContactDirectory(Context context, boolean hasAsked) {
+    setBooleanPreference(context, CUSTOM_CONTACT_DIRECTORY_ASKED, hasAsked);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

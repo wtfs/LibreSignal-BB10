@@ -198,15 +198,7 @@ public class TextSecureDirectory {
       if (cursor != null)
         cursor.close();
 
-      final SQLiteDatabase readableDb = databaseHelper.getReadableDatabase();
-      if (readableDb != null) {
-        cursor = readableDb.query(TABLE_NAME, new String[]{NUMBER},
-            null, null, null, null, null);
-
-        while (cursor != null && cursor.moveToNext()) {
-          results.add(cursor.getString(0));
-        }
-      }
+      results.addAll(getActiveNumbers());
 
       return results;
     } finally {
