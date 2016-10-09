@@ -1,3 +1,6 @@
+[submodule "libs/ShortcutBadger"]
+	path = libs/ShortcutBadger
+	url = https://github.com/WhisperSystems/ShortcutBadger.git
 [submodule "libs/libtextsecure-java"]
 	path = libs/libtextsecure-java
 	url = https://github.com/LibreSignal/libtextsecure-java.git
@@ -7,6 +10,3 @@
 [submodule "libs/org.w3c.dom"]
 	path = libs/org.w3c.dom
 	url = https://github.com/SMSSecure/org.w3c.dom.git
-[submodule "libs/ShortcutBadger"]
-	path = libs/ShortcutBadger
-	url = https://github.com/WhisperSystems/ShortcutBadger.git
